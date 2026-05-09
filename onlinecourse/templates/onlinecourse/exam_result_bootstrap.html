@@ -29,47 +29,51 @@
         </div>
     </nav>
 
-<div class="container mt-5">
-    <!-- Pass/Fail Logic -->
-    {% if grade >= 80 %}
+    <div class="container mt-5">
+        <!-- Pass/Fail Logic -->
+        {% if grade >= 80 %}
         <div class="alert alert-success">
-            <b>Congratulations, {{ user.username }}!</b> You have passed the exam and completed the course with a score of {{ grade }}/100.
+            <b>Congratulations, {{ user.username }}!</b> You have passed the exam and completed the course with a score
+            of {{ grade }}/100.
         </div>
-    {% else %}
+        {% else %}
         <div class="alert alert-danger">
             <b>Failed</b> Sorry, {{ user.username }}! You have failed the exam with a score of {{ grade }}/100.
         </div>
-    {% endif %}
+        {% endif %}
 
-    <hr>
-    <h3>Exam Review</h3>
+        <hr>
+        <h3>Exam Review</h3>
 
-    <!-- Question and Answer Breakdown -->
-    {% for question in course.question_set.all %}
-    <div class="card mt-1">
-        <div class="card-header"><h5>{{ question.content }}</h5></div>
-        <div class="card-body">
-            <div class="form-group">
-                {% for choice in question.choice_set.all %}
-                <div class="form-check">
-                    {% if choice.is_correct and choice in choices %}
+        <!-- Question and Answer Breakdown -->
+        {% for question in course.question_set.all %}
+        <div class="card mt-1">
+            <div class="card-header">
+                <h5>{{ question.content }}</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    {% for choice in question.choice_set.all %}
+                    <div class="form-check">
+                        {% if choice.is_correct and choice in choices %}
                         <div class="text-success font-weight-bold">Correct answer: {{ choice.content }}</div>
-                    {% elif choice.is_correct and not choice in choices %}
+                        {% elif choice.is_correct and not choice in choices %}
                         <div class="text-warning font-weight-bold">Missed correct answer: {{ choice.content }}</div>
-                    {% elif not choice.is_correct and choice in choices %}
+                        {% elif not choice.is_correct and choice in choices %}
                         <div class="text-danger font-weight-bold">Wrong answer: {{ choice.content }}</div>
-                    {% else %}
+                        {% else %}
                         <div>{{ choice.content }}</div>
-                    {% endif %}
+                        {% endif %}
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
         </div>
+        {% endfor %}
+
+        <br>
+        <a class="btn btn-primary" href="{% url 'onlinecourse:course_details' course.id %}">Back to Course</a>
     </div>
-    {% endfor %}
-    
-    <br>
-    <a class="btn btn-primary" href="{% url 'onlinecourse:course_details' course.id %}">Back to Course</a>
-</div>
 </body>
+
 </html>
